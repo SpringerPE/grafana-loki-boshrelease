@@ -1,0 +1,3 @@
+[submodule "src/github.com/grafana/loki"]
+	path = src/github.com/grafana/loki
+	url = https://github.com/grafana/loki.git
