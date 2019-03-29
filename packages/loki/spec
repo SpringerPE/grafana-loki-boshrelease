@@ -2,7 +2,7 @@
 name: loki
 
 dependencies:
-- golang1.12
+- golang
 
 files:
 - ./**/*
