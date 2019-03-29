@@ -3,7 +3,7 @@ server:
   grpc_listen_port: 0
 
 positions:
-  filename: /var/vcap/data/store/promtail/positions.yaml
+  filename: /var/vcap/store/promtail/positions.yaml
 
 client:
   url: <%= p("promtail.loki") %>
