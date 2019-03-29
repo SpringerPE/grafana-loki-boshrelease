@@ -14,8 +14,9 @@ cp -a . ${BOSH_INSTALL_TARGET}/src
 export GOPATH=${BOSH_INSTALL_TARGET}
 export GOROOT=$(readlink -nf "${BOSH_PACKAGES_DIR}/golang")
 export PATH=${GOROOT}/bin:${PATH}
-export GOCACHE=off
+export GOCACHE=/var/vcap/data/tmp/go
 
+mkdir -p ${GOCACHE}
 pushd ${BOSH_INSTALL_TARGET}/src/github.com/grafana/loki
   go build -o ${BOSH_INSTALL_TARGET}/bin/promtail cmd/promtail/main.go
 popd
