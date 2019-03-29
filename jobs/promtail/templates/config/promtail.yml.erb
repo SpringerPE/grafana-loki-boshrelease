@@ -1,0 +1,28 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /var/vcap/data/store/promtail/positions.yaml
+
+client:
+  url: <%= p("promtail.loki") %>
+
+scrape_configs:
+- job_name: system
+  entry_parser: raw
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: varlogs
+      __path__: /var/log/*.log
+- job_name: bosh
+  entry_parser: raw
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: jobs
+      __path__: /var/vcap/sys/logs/*/*.log
+
