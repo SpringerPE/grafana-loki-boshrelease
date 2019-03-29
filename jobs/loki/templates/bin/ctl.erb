@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Load job properties
+source /var/vcap/jobs/loki/data/properties.sh
+
+# Setup env vars and folders for the ctl script
+source /var/vcap/jobs/loki/packages/bosh-helpers/setup.sh "loki"
+
+# Load function lib (alway before setup, there are some global variables needed)
+source /var/vcap/jobs/loki/packages/bosh-helpers/lib.sh
+
+case ${1:-help} in
+  start)
+    echon_log "Starting $COMPONENT: "
+    pid_guard $PIDFILE $COMPONENT
+    # Load python library path for dynamic libs
+    ldconf "$LD_LIBRARY_PATH"
+    (
+        {
+            setcap 'cap_net_bind_service=+ep' $(readlink -nf $(which loki))
+            exec chpst -v -u vcap:vcap  loki
+        } >>$LOG_DIR/$COMPONENT.stdout.log \
+        2>>$LOG_DIR/$COMPONENT.stderr.log
+    ) &
+    echo $! > $PIDFILE
+    echo "$(<${PIDFILE}). Done"
+    ;;
+  stop)
+    echo_log "Stopping $COMPONENT: $(<${PIDFILE}). "
+    kill_and_wait $PIDFILE
+    rm -f $PIDFILE
+    echo_log "Done"
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    ;;
+esac
+exit 0

@@ -1,0 +1,6 @@
+check process loki
+  with pidfile /var/vcap/sys/run/loki/loki.pid
+  start program "/var/vcap/jobs/loki/bin/ctl start"
+  stop program "/var/vcap/jobs/loki/bin/ctl stop"
+  group vcap
+

@@ -1,0 +1,6 @@
+check process promtail
+  with pidfile /var/vcap/sys/run/promtail/promtail.pid
+  start program "/var/vcap/jobs/promtail/bin/ctl start"
+  stop program "/var/vcap/jobs/promtail/bin/ctl stop"
+  group vcap
+

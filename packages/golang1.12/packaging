@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# abort script on any command that exits with a non zero value
+set -e -x
+
+# Grab the latest versions that are in the directory
+ZLIB_VERSION=$(ls -v -r golang/go*.linux-amd64.tar.gz | sed 's/.*\/go\(.*\)\.tar\.gz$/\1/' | head -1)
+BOSH_PACKAGES_DIR=${BOSH_PACKAGES_DIR:-/var/vcap/packages}
+
+
+echo "Extracting golang ${GO_VERSION} ... "
+tar xzf golang/go${GO_VERSION}.linux-amd64.tar.gz
+cp -R go/* ${BOSH_INSTALL_TARGET}
+

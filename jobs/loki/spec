@@ -1,0 +1,13 @@
+---
+name: loki
+
+description: Loki server
+
+templates:
+  bin/ctl.erb: bin/ctl
+  data/properties.sh.erb: data/properties.sh
+
+packages:
+- bosh-helpers
+
+properties: {}

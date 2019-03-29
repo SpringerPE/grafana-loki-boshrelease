@@ -1,0 +1,13 @@
+---
+name: promtail
+
+description: promtail for loki
+
+templates:
+  bin/ctl.erb: bin/ctl
+  data/properties.sh.erb: data/properties.sh
+
+packages:
+- bosh-helpers
+
+properties: {}
