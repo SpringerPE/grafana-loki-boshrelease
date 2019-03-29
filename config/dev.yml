@@ -1,0 +1,4 @@
+---
+dev_name: loki
+blobstore:
+  provider: local
