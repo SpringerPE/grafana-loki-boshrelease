@@ -15,7 +15,13 @@ scrape_configs:
   - targets:
       - localhost
     labels:
-      job: varlogs
+      source: var
+      job: system
+      az: <%= spec.az %>
+      instance_name: <%= spec.name %>
+      instancE_id: <%= spec.id %>
+      address: <%= spec.address %>
+      ip: <%= spec.ip %>
       __path__: /var/log/*.log
 - job_name: bosh
   entry_parser: raw
@@ -23,6 +29,12 @@ scrape_configs:
   - targets:
       - localhost
     labels:
-      job: jobs
+      source: bosh
+      job: <%= name %>
+      az: <%= spec.az %>
+      instance_name: <%= spec.name %>
+      instancE_id: <%= spec.id %>
+      address: <%= spec.address %>
+      ip: <%= spec.ip %>
       __path__: /var/vcap/sys/logs/*/*.log
 
