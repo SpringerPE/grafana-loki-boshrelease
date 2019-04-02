@@ -21,7 +21,7 @@ case ${1:-help} in
     (
         {
             setcap 'cap_net_bind_service=+ep' $(readlink -nf $(which loki))
-            exec chpst -v -u vcap:vcap  loki
+            exec chpst -v -u vcap:vcap  loki -config.file=/var/vcap/jobs/loki/config/loki.yml -log.level=debug
         } >>$LOG_DIR/$COMPONENT.stdout.log \
         2>>$LOG_DIR/$COMPONENT.stderr.log
     ) &

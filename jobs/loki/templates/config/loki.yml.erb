@@ -1,0 +1,38 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+  graceful_shutdown_timeout: '5s'
+  http_server_idle_timeout: '120s'
+  grpc_server_max_recv_msg_size: "1024 * 1024 * 64"
+
+
+ingester:
+  lifecycler:
+    address: 0.0.0.0
+    ring:
+      store: inmemory
+      replication_factor: 1
+  chunk_idle_period: 15m
+
+schema_config:
+  configs:
+  - from: 0
+    store: boltdb
+    object_store: filesystem
+    schema: v9
+    index:
+      prefix: index_
+      period: 168h
+
+storage_config:
+  boltdb:
+    directory: /var/vcap/store/loki/index
+  filesystem:
+    directory: /var/vcap/store/loki/chunks
+
+
+limits_config:
+  enforce_metric_name: false
+
+

@@ -6,8 +6,10 @@ description: Loki server
 templates:
   bin/ctl.erb: bin/ctl
   data/properties.sh.erb: data/properties.sh
+  config/loki.yml.erb: config/loki.yml
 
 packages:
 - bosh-helpers
+- loki
 
 properties: {}
