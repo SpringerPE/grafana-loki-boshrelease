@@ -18,7 +18,7 @@ export GOCACHE=/var/vcap/data/tmp/go
 
 mkdir -p ${GOCACHE}
 pushd ${BOSH_INSTALL_TARGET}/src/github.com/grafana/loki
-  go build -o ${BOSH_INSTALL_TARGET}/bin/promtail cmd/loki/main.go
+  go build -o ${BOSH_INSTALL_TARGET}/bin/loki cmd/loki/main.go
 popd
 
 # clean up source artifacts
