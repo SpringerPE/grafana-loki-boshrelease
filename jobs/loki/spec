@@ -9,7 +9,27 @@ templates:
   config/loki.yml.erb: config/loki.yml
 
 packages:
-- bosh-helpers
 - loki
 
-properties: {}
+properties:
+  loki.port:
+    default: 3100
+    description: Listen port
+  loki.index_store:
+    default: "boltdb"
+    description: Index store
+  loki.object_store:
+    default: "filesystem"
+    description: Chunk store
+  loki.prefix_index:
+    default: "index_"
+    description: Index prefix
+  loki.index_store_params:
+    default:
+      directory: /var/vcap/store/loki/index
+    description: Parameters for Index store
+  loki.object_store_params:
+    default:
+      directory: /var/vcap/store/loki/chunks
+    description: Parameters for Chunk store
+
