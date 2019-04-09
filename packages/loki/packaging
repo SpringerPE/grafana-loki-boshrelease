@@ -26,3 +26,9 @@ rm -rf ${BOSH_INSTALL_TARGET}/src ${BOSH_INSTALL_TARGET}/pkg
 
 # copy binaries
 chmod a+x ${BOSH_INSTALL_TARGET}/bin/*
+
+# Install shell helpers
+echo "Adding shell helpers ..."
+mkdir -p ${BOSH_INSTALL_TARGET}
+cp -av bosh-helpers ${BOSH_INSTALL_TARGET}/
+
