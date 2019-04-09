@@ -7,13 +7,21 @@ templates:
   bin/ctl.erb: bin/ctl
   data/properties.sh.erb: data/properties.sh
   config/promtail.yml.erb: config/promtail.yml
+  config/confd.sh: config/confd.sh
 
 packages:
-- bosh-helpers
 - promtail
 
 properties:
   promtail.loki:
     default: "http://localhost:3100/api/prom/push"
     description: The host of the Loki intake server to send data to
+  promtail.bosh_labels:
+    default: true
+    description: Generate bosh deployment labels
+  promtail.labels:
+    description: Additional key:value labels'
+  promtail.varlog:
+    default: true
+    description: 'Add system logfiles in /var/log'
 

@@ -1,3 +1,18 @@
+<%
+generated_labels = {}
+if p('promtail.bosh_labels') == true || p('promtail.bosh_labels') =~ (/(true|t|yes|y|1)$/i)
+    bosh_tags_prefix=p('dd.bosh_labels_prefix', '')
+    generated_labels["#{bosh_tags_prefix}instance"] = spec.id
+    generated_labels["#{bosh_tags_prefix}name"] = spec.name
+    generated_labels["#{bosh_tags_prefix}index"] = spec.index
+    generated_labels["#{bosh_tags_prefix}az"] = spec.az
+    generated_labels["#{bosh_tags_prefix}address"] = spec.address if spec.address and not spec.address.empty?
+    generated_labels["#{bosh_tags_prefix}ip"] = spec.ip if spec.ip and not spec.ip.empty?
+    generated_labels["#{bosh_tags_prefix}deployment"] = spec.deployment
+end
+labels =  generated_labels.merge(p('promtail.labels', {}))
+%>
+
 server:
   http_listen_port: 9080
   grpc_listen_port: 0
@@ -8,33 +23,90 @@ positions:
 client:
   url: <%= p("promtail.loki") %>
 
+  # Maximum wait period before sending batch
+  batchwait: 1s
+  Maximum batch size to accrue before sending, unit is byte
+  batchsize: 102400
+
+  # Maximum time to wait for server to respond to a request
+  timeout: 10s
+
+  backoff_config:
+    # Initial backoff time between retries
+    minbackoff: 100ms
+    # Maximum backoff time between retries
+    maxbackoff: 5s
+    # Maximum number of retires when sending batches, 0 means infinite retries
+    maxretries: 5
+
+  # The labels to add to any time series or alerts when communicating with loki
+  external_labels:
+<% labels.each do |key, value| -%>
+    <%= key %>: '<%= value %>'
+<% end %>
+
+log:
+  level: info
+
 scrape_configs:
-- job_name: system
+<% if p('promtail.varlog') == true || p('promtail.varlog') =~ (/(true|t|yes|y|1)$/i) %>
+- job_name: kern
   entry_parser: raw
   static_configs:
   - targets:
       - localhost
     labels:
-      source: var
-      job: system
-      az: <%= spec.az %>
-      instance_name: <%= spec.name %>
-      instancE_id: <%= spec.id %>
-      address: <%= spec.address %>
-      ip: <%= spec.ip %>
-      __path__: /var/log/*.log
+      source: syslog
+      job: kern
+      __path__: /var/log/kern.log
+- job_name: syslog
+  entry_parser: raw
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      source: syslog
+      job: syslog
+      __path__: /var/log/syslog
+- job_name: auth
+  entry_parser: raw
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      source: syslog
+      job: auth
+      __path__: /var/log/auth.log
+- job_name: dmesg
+  entry_parser: raw
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      source: syslog
+      job: dmesg
+      __path__: /var/log/dmesg
+<% end %>
 - job_name: bosh
   entry_parser: raw
-  static_configs:
-  - targets:
-      - localhost
-    labels:
-      source: bosh
-      job: <%= name %>
-      az: <%= spec.az %>
-      instance_name: <%= spec.name %>
-      instancE_id: <%= spec.id %>
-      address: <%= spec.address %>
-      ip: <%= spec.ip %>
-      __path__: /var/vcap/sys/logs/*/*.log
+  file_sd_configs:
+  - files:
+    - /var/vcap/jobs/promtail/config/bosh/*.yaml
+    refresh_interval: 10m
+
+
+#- job_name: bosh
+#  entry_parser: raw
+#  static_configs:
+#  - targets:
+#      - localhost
+#    labels:
+#      source: bosh
+#      job: <%= name %>
+#      __path__: '/var/vcap/sys/log/*/*.log'
+#  relabel_configs:
+#  - source_labels: [__filename__]
+#    regex: '/var/vcap/sys/log/(.+)/.*'
+#    replacement: '$1'
+#    target_label: job
 
