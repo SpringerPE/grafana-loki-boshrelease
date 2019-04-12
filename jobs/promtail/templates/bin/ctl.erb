@@ -22,7 +22,7 @@ case ${1:-help} in
         {
             setcap 'cap_net_bind_service=+ep' $(readlink -nf $(which promtail))
             source /var/vcap/jobs/promtail/config/confd.sh
-            exec chpst -v -u root:root promtail -config.file=/var/vcap/jobs/promtail/config/promtail.yml
+            exec chpst -v -u root:root promtail -config.file=/var/vcap/jobs/promtail/config/promtail.yml -log.level=info
         } >>$LOG_DIR/$COMPONENT.stdout.log \
         2>>$LOG_DIR/$COMPONENT.stderr.log
     ) &

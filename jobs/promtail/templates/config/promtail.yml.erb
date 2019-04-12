@@ -18,19 +18,16 @@ server:
   grpc_listen_port: 0
 
 positions:
-  filename: /var/vcap/store/promtail/positions.yaml
+  filename: '/var/vcap/store/promtail/positions.yaml'
 
 client:
-  url: <%= p("promtail.loki") %>
-
+  url: '<%= p("promtail.loki") %>'
   # Maximum wait period before sending batch
   batchwait: 1s
-  Maximum batch size to accrue before sending, unit is byte
+  # Maximum batch size to accrue before sending, unit is byte
   batchsize: 102400
-
   # Maximum time to wait for server to respond to a request
   timeout: 10s
-
   backoff_config:
     # Initial backoff time between retries
     minbackoff: 100ms
@@ -38,15 +35,11 @@ client:
     maxbackoff: 5s
     # Maximum number of retires when sending batches, 0 means infinite retries
     maxretries: 5
-
   # The labels to add to any time series or alerts when communicating with loki
   external_labels:
 <% labels.each do |key, value| -%>
     <%= key %>: '<%= value %>'
 <% end %>
-
-log:
-  level: info
 
 scrape_configs:
 <% if p('promtail.varlog') == true || p('promtail.varlog') =~ (/(true|t|yes|y|1)$/i) %>
@@ -91,7 +84,7 @@ scrape_configs:
   entry_parser: raw
   file_sd_configs:
   - files:
-    - /var/vcap/jobs/promtail/config/bosh/*.yaml
+    - '/var/vcap/jobs/promtail/config/bosh/*.yaml'
     refresh_interval: 10m
 
 
