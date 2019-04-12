@@ -9,6 +9,9 @@ source /var/vcap/jobs/loki/data/properties.sh
 # Setup env vars and folders for the ctl script
 source /var/vcap/jobs/loki/packages/loki/bosh-helpers/setup.sh "loki"
 
+# Env variables
+source /var/vcap/jobs/loki/data/env.sh
+
 # Load function lib (alway before setup, there are some global variables needed)
 source /var/vcap/jobs/loki/packages/loki/bosh-helpers/lib.sh
 
@@ -21,7 +24,7 @@ case ${1:-help} in
     (
         {
             setcap 'cap_net_bind_service=+ep' $(readlink -nf $(which loki))
-            exec chpst -v -u vcap:vcap  loki -config.file=/var/vcap/jobs/loki/config/loki.yml -log.level=debug
+            exec chpst -v -u vcap:vcap  loki -config.file=/var/vcap/jobs/loki/config/loki.yml
         } >>$LOG_DIR/$COMPONENT.stdout.log \
         2>>$LOG_DIR/$COMPONENT.stderr.log
     ) &

@@ -6,10 +6,23 @@ description: Loki server
 templates:
   bin/ctl.erb: bin/ctl
   data/properties.sh.erb: data/properties.sh
+  data/env.sh.erb: data/env.sh
   config/loki.yml.erb: config/loki.yml
+  config/credentials.erb: config/credentials
 
 packages:
 - loki
+
+consumes:
+- name: loki
+  type: ingestor
+  optional: true
+
+provides:
+- name: loki
+  type: ingestor
+  properties:
+  - loki.port
 
 properties:
   loki.port:
@@ -24,6 +37,10 @@ properties:
   loki.prefix_index:
     default: "index_"
     description: Index prefix
+  loki.credentials:
+    description: Google or AWS credentials
+  loki.env:
+    description: A hash of environment variables
   loki.index_store_params:
     default:
       directory: /var/vcap/store/loki/index
