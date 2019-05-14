@@ -21,24 +21,24 @@ positions:
   filename: '/var/vcap/store/promtail/positions.yaml'
 
 clients:
-  url: '<%= p("promtail.loki") %>'
-  # Maximum wait period before sending batch
-  batchwait: 1s
-  # Maximum batch size to accrue before sending, unit is byte
-  batchsize: 102400
-  # Maximum time to wait for server to respond to a request
-  timeout: 10s
-  backoff_config:
-    # Initial backoff time between retries
-    minbackoff: 100ms
-    # Maximum backoff time between retries
-    maxbackoff: 5s
-    # Maximum number of retires when sending batches, 0 means infinite retries
-    maxretries: 5
-  # The labels to add to any time series or alerts when communicating with loki
-  external_labels:
+  - url: '<%= p("promtail.loki") %>'
+    # Maximum wait period before sending batch
+    batchwait: 1s
+    # Maximum batch size to accrue before sending, unit is byte
+    batchsize: 102400
+    # Maximum time to wait for server to respond to a request
+    timeout: 10s
+    backoff_config:
+      # Initial backoff time between retries
+      minbackoff: 100ms
+      # Maximum backoff time between retries
+      maxbackoff: 5s
+      # Maximum number of retires when sending batches, 0 means infinite retries
+      maxretries: 5
+    # The labels to add to any time series or alerts when communicating with loki
+    external_labels:
 <% labels.each do |key, value| -%>
-    <%= key %>: '<%= value %>'
+      <%= key %>: '<%= value %>'
 <% end %>
 
 scrape_configs:
