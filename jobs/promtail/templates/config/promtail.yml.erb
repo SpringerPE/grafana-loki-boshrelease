@@ -20,7 +20,7 @@ server:
 positions:
   filename: '/var/vcap/store/promtail/positions.yaml'
 
-client:
+clients:
   url: '<%= p("promtail.loki") %>'
   # Maximum wait period before sending batch
   batchwait: 1s
