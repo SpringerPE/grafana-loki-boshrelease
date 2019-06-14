@@ -1,6 +1,9 @@
 golang/go1.12.1.linux-amd64.tar.gz:
   size: 127906702
   sha: 502e00384c70aa6dad333b06fba903367150f2cd
+golang/go1.12.6.linux-amd64.tar.gz:
+  size: 127957980
+  sha: d74b94494c0859ef0b46a46735825b2329f3409b
 lua/LuaJIT-2.0.5.tar.gz:
   size: 849845
   sha: 10427215da7d424fd9e48adbea087966053cdb6f
