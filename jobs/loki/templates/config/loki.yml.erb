@@ -9,7 +9,8 @@ ingester:
   lifecycler:
     address: 0.0.0.0
     ring:
-      store: inmemory
+      kvstore:
+        store: inmemory
       replication_factor: 1
 
 limits_config:
