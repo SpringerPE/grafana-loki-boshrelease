@@ -17,8 +17,10 @@ export PATH=${GOROOT}/bin:${PATH}
 export GOCACHE=/var/vcap/data/tmp/go
 
 mkdir -p ${GOCACHE}
+
 pushd ${BOSH_INSTALL_TARGET}/src/github.com/grafana/loki
-  go build -o ${BOSH_INSTALL_TARGET}/bin/promtail cmd/promtail/main.go
+  CGO_ENABLED=0 go generate -x -v ./pkg/promtail/server/ui
+  CGO_ENABLED=0 go build -ldflags "-s -w -X github.com/grafana/loki/vendor/github.com/prometheus/common/version.Branch=dev -X github.com/grafana/loki/vendor/github.com/prometheus/common/version.Version=0.3.0-BOSH -X github.com/grafana/loki/vendor/github.com/prometheus/common/version.Revision=0.3.0" -tags netgo -o ${BOSH_INSTALL_TARGET}/bin/promtail  ./cmd/promtail/main.go
 popd
 
 # clean up source artifacts
